@@ -3,12 +3,8 @@ import { userSchema } from "./user.model.js";
 import { raceSchema } from "./race.model.js";
 import { racerSchema } from "./racer.model.js";
 import { teamSchema } from "./team.model.js";
-import { teamStandingsSchema } from "./teamStandings.model.js";
-import { racerStandingsSchema } from "./racerStandings.model.js";
 import { resultsSchema } from "./results.model.js";
-import { managerSchema } from "./manager.model.js";
 import { seasonSchema } from "./season.model.js";
-import { committeeSchema } from "./committee.model.js";
 
 import dotenv from "dotenv";
 dotenv.config(); // su dung bien env trong file .env
@@ -43,12 +39,8 @@ db.User = userSchema(sequelize, DataTypes);
 db.Race = raceSchema(sequelize, DataTypes);
 db.Racer = racerSchema(sequelize, DataTypes);
 db.Team = teamSchema(sequelize, DataTypes);
-db.TeamStandings = teamStandingsSchema(sequelize, DataTypes);
-db.RacerStandings = racerStandingsSchema(sequelize, DataTypes);
 db.Results = resultsSchema(sequelize, DataTypes);
-db.Manager = managerSchema(sequelize, DataTypes);
 db.Season = seasonSchema(sequelize, DataTypes);
-db.Committee = committeeSchema(sequelize, DataTypes);
 
 const createOneToManyRelation = function (manyModel, oneModel, foreignKey, as) {
   oneModel.hasMany(manyModel, {
@@ -85,17 +77,11 @@ const createManyToManyRelation = function (
   model2.belongsToMany(model1, { through: modelRelation, as: as2 });
 };
 
-createOneToManyRelation(db.Song, db.User, "userId", "user_songs");
 createOneToManyRelation(db.Racer, db.Team, "teamId", "team_racers");
-createOneToOneRelation(db.Manager, db.Team, "teamId", "team_manager");
+createOneToManyRelation(db.Results, db.Racer, "racerId", "racer_results");
 
-// createManyToManyRelation(
-//   db.Song,
-//   db.Playlist,
-//   "playlist_songs_song",
-//   "song_playlists",
-//   "playlist_songs"
-// );
+createOneToManyRelation(db.Results, db.Race, "raceId", "race_results");
+createOneToManyRelation(db.Race, db.Season, "seasonId", "season_races");
 
 db.sequelize.sync({ alter: true }).then(() => {
   console.log("re-sync database done.");

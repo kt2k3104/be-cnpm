@@ -78,8 +78,8 @@ export const userService = {
 
     if (avatar) {
       const publicId =
-        "music-app-expressjs/images" +
-        avatar.split("music-app-expressjs/images")[1].split(".")[0];
+        "cnpm-app-express/images" +
+        avatar.split("cnpm-app-express/images")[1].split(".")[0];
       await uploadHelper.deleteImage(publicId, next);
     }
     const data = await db.User.update(

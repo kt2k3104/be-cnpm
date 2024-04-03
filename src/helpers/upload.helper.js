@@ -21,7 +21,7 @@ const clearFile = (filePath) => {
 const uploadImage = async (file, next) => {
   try {
     const result = await cloudinary.v2.uploader.upload(file.path, {
-      folder: "music-app-expressjs/images",
+      folder: "cnpm-app-express/images",
     });
     if (result) {
       clearFile(file.path);
